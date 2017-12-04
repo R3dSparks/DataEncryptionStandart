@@ -111,6 +111,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="DESAlgorithm.h" />
+    <ClInclude Include="Permutations.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DESAlgorithm.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Permutations.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
