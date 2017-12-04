@@ -1,12 +1,5 @@
 #pragma once
-
-enum CipherMode
-{
-	ECM,
-	CBC,
-	CFB,
-	OFB
-};
+#include "BlockCipher.h"
 
 class DESAlgorithm
 {

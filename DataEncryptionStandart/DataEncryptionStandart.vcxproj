@@ -111,10 +111,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BlockCipher.h" />
     <ClInclude Include="DESAlgorithm.h" />
     <ClInclude Include="Permutations.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BlockCipher.cpp" />
     <ClCompile Include="DESAlgorithm.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Permutations.cpp" />
