@@ -26,6 +26,12 @@ const perm Permutations::OutputPermutation =
 	60, 52, 44, 36, 28, 20, 12, 4, 62, 54, 46, 38, 30, 22, 14, 6
 };
 
+const perm Permutations::Permutation =
+{
+	15, 6, 19, 20, 28, 11, 27, 16, 0, 14, 22, 25, 4, 17, 30, 9,
+	1, 7, 23, 13, 31, 26, 2, 8, 18, 12, 29, 5, 21, 10, 3, 24
+};
+
 const perm Permutations::Extension = 
 {
 
