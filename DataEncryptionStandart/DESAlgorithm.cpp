@@ -1,53 +1,84 @@
 #include "DESAlgorithm.h"
 
 
-DESAlgorithm::DESAlgorithm(long _key)
+DESAlgorithm::DESAlgorithm(uint64_t _key)
 {
 	this->key_ = _key;
-	this->round_key_ = KeyGenerator(_key);
+	this->encryption_round_key_ = EncryptKeyGenerator(_key);
+	this->decryption_round_key_ = DecryptKeyGenerator(_key);
 }
 
 
 DESAlgorithm::~DESAlgorithm()
 {
-	delete(round_key_);
+	delete(encryption_round_key_);
+	delete(decryption_round_key_);
 }
 
 // Public
 
-long DESAlgorithm::Encrypt(long _message)
+uint64_t DESAlgorithm::Encrypt(uint64_t _message)
 {
 	_message = Permutations::Permutate(_message, 64, IP);
 
-	int left = _message >> 32;
-	int right = _message & 0xffffffff;
+	unsigned int left = _message >> 32;
+	unsigned int right = _message & 0xffffffff;
 
 	for (int i = 0; i < 16; i++)
 	{
-		long expanded_right = Permutations::Permutate(right, 48, E);
+		uint64_t expanded_right = Permutations::Permutate(right, 48, E);
 
-		expanded_right ^= this->round_key_[i];
+		expanded_right ^= this->encryption_round_key_[i];
 
+		left = right;
 
+		expanded_right = Permutations::SBoxSubstitution(expanded_right);
+
+		right = Permutations::Permutate(expanded_right, 32, P);
 	}
+
+	_message = ((uint64_t)right << 32) | ((uint64_t)left);
 
 	return Permutations::Permutate(_message, 64, PI);
 }
 
-long DESAlgorithm::Decrypt(long _cyphertext)
+uint64_t DESAlgorithm::Decrypt(uint64_t _cyphertext)
 {
+	_cyphertext = Permutations::Permutate(_cyphertext, 64, IP);
+
+	unsigned int left = _cyphertext >> 32;
+	unsigned int right = _cyphertext & 0xffffffff;
+
+	for (int i = 0; i < 16; i++)
+	{
+		uint64_t expanded_right = Permutations::Permutate(right, 48, E);
+
+		expanded_right ^= this->decryption_round_key_[i];
+
+		expanded_right = Permutations::SBoxSubstitution(expanded_right);
+
+		expanded_right ^= left;
+
+		left = right;
+
+		right = Permutations::Permutate(expanded_right, 32, P);
+	}
+
+	_cyphertext = ((uint64_t)right << 32) | ((uint64_t)left);
+
+	return Permutations::Permutate(_cyphertext, 64, PI);
 }
 
-long* DESAlgorithm::KeyGenerator(long _key)
+uint64_t* DESAlgorithm::EncryptKeyGenerator(uint64_t _key)
 {
-	long* keys = new long[16];
+	uint64_t* keys = new uint64_t[16];
 
 	_key = Permutations::Permutate(_key, 56, PC1);
 
 	int left = _key >> 28;
 	int right = _key & 0xfffffff;
 
-	long round_key = 0;
+	uint64_t round_key = 0;
 
 	for (int i = 0; i < 16; i++)
 	{
@@ -64,9 +95,35 @@ long* DESAlgorithm::KeyGenerator(long _key)
 	return keys;
 }
 
+uint64_t* DESAlgorithm::DecryptKeyGenerator(uint64_t _key)
+{
+	uint64_t* keys = new uint64_t[16];
+
+	_key = Permutations::Permutate(_key, 56, PC1);
+
+	int left = _key >> 28;
+	int right = _key & 0xfffffff;
+
+	uint64_t round_key = 0;
+
+	for (int i = 0; i < 16; i++)
+	{
+		int rotation = (i == 2 || i == 9 || i == 16) ? 1 : 2;
+
+		left = (int)rotateRight(left, 28, rotation);
+		right = (int)rotateRight(right, 28, rotation);
+
+		round_key = right | (left << 28);
+
+		keys[i] = Permutations::Permutate(round_key, 48, PC2);
+	}
+
+	return keys;
+}
+
 // Private
 
-long DESAlgorithm::rotateLeft(long _value, int _range, int _steps)
+uint64_t DESAlgorithm::rotateLeft(uint64_t _value, int _range, int _steps)
 {
 	if (_range > 64)
 		throw "Range can only be between 0 and 64";
@@ -74,7 +131,20 @@ long DESAlgorithm::rotateLeft(long _value, int _range, int _steps)
 	if (_steps > _range)
 		throw "Steps can't be larger than range";
 
-	long buffer = _value >> (_range - _steps);
+	uint64_t buffer = _value >> (_range - _steps);
 
 	return (_value << _steps) | buffer;
+}
+
+uint64_t DESAlgorithm::rotateRight(uint64_t _value, int _range, int _steps)
+{
+	if (_range > 64)
+		throw "Range can only be between 0 and 64";
+
+	if (_steps > _range)
+		throw "Steps can't be larger than range";
+
+	uint64_t buffer = _value & (0xffffffffffffffff >> (64 - _steps));
+
+	return (_value >> _steps) | (buffer << (_range - _steps));
 }

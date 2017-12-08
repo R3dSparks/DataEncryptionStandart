@@ -17,13 +17,14 @@
 #define SBOX7 Permutations::SBox7
 
 typedef int perm[];
-typedef int sbox[16][4];
+typedef int sbox[4][16];
+typedef unsigned long long uint64_t;
 
 class Permutations
 {
 public:
-	static long Permutate(long, int, const perm);
-	static int SBoxSubstitution(long);
+	static uint64_t Permutate(uint64_t, int, const perm);
+	static int SBoxSubstitution(uint64_t);
 
 	// Input permutation table
 	static const perm InputPermutation;
@@ -53,7 +54,7 @@ private:
 	Permutations();
 	~Permutations();
 
-	static void setBit(long&, int, bool);
+	static void setBit(uint64_t&, int, bool);
 	static int sBox(int, const sbox);
 };
 

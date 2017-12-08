@@ -8,19 +8,20 @@ enum CipherMode
 	OFB	 // Output feedback mode
 };
 
-typedef long (*EncryptionAlgorithm)(long, long);
+typedef unsigned long long uint64_t;
+typedef uint64_t (*EncryptionAlgorithm)(uint64_t, uint64_t);
 
 class BlockCipher
 {
 
 public:
-	static void Encrypt(long*, int, long, CipherMode, EncryptionAlgorithm);
-	static void Decrypt(long*, int, long, CipherMode, EncryptionAlgorithm);
+	static void Encrypt(uint64_t*, int, uint64_t, CipherMode, EncryptionAlgorithm);
+	static void Decrypt(uint64_t*, int, uint64_t, CipherMode, EncryptionAlgorithm);
 
 private:
 	BlockCipher();
 	~BlockCipher();
 
-	static void ecmEncrypt(long*, int, long, EncryptionAlgorithm);
+	static void ecmEncrypt(uint64_t*, int, uint64_t, EncryptionAlgorithm);
 };
 

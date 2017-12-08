@@ -11,7 +11,7 @@ BlockCipher::~BlockCipher()
 {
 }
 
-void BlockCipher::Encrypt(long* _message, int _blocks, long _key, CipherMode _mode, EncryptionAlgorithm _encrypt)
+void BlockCipher::Encrypt(uint64_t* _message, int _blocks, uint64_t _key, CipherMode _mode, EncryptionAlgorithm _encrypt)
 {
 	switch (_mode)
 	{
@@ -28,13 +28,13 @@ void BlockCipher::Encrypt(long* _message, int _blocks, long _key, CipherMode _mo
 	}
 }
 
-void BlockCipher::Decrypt(long* _cyphertext, int _blocks, long _key, CipherMode _mode, EncryptionAlgorithm _encrypt)
+void BlockCipher::Decrypt(uint64_t* _cyphertext, int _blocks, uint64_t _key, CipherMode _mode, EncryptionAlgorithm _encrypt)
 {
 }
 
 // Private
 
-void BlockCipher::ecmEncrypt(long* _message, int _blocks, long _key, EncryptionAlgorithm _encrypt)
+void BlockCipher::ecmEncrypt(uint64_t* _message, int _blocks, uint64_t _key, EncryptionAlgorithm _encrypt)
 {
 	for (int i = 0; i < _blocks; i++)
 		_message[i] = _encrypt(_message[i], _key);
