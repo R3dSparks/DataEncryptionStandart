@@ -7,9 +7,9 @@
 
 int main()
 {
-	DESAlgorithm desa = DESAlgorithm(0x1);
+	DESAlgorithm desa = DESAlgorithm(0x133457799bbcdff1);
 
-	uint64_t cypher = desa.Encrypt(0x31);
+	uint64_t cypher = desa.Encrypt(0x0123456789ABCDEF);
 
 	std::cout << std::hex << cypher << std::endl;
 

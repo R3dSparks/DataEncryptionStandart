@@ -23,8 +23,8 @@ typedef unsigned long long uint64_t;
 class Permutations
 {
 public:
-	static uint64_t Permutate(uint64_t, int, const perm);
-	static int SBoxSubstitution(uint64_t);
+	static uint64_t Permutate(uint64_t, int, int, const perm);
+	static uint64_t SBoxSubstitution(uint64_t);
 
 	// Input permutation table
 	static const perm InputPermutation;
@@ -55,6 +55,6 @@ private:
 	~Permutations();
 
 	static void setBit(uint64_t&, int, bool);
-	static int sBox(int, const sbox);
+	static unsigned int sBox(unsigned int, const sbox);
 };
 
