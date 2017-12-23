@@ -11,12 +11,12 @@ BlockCipher::~BlockCipher()
 {
 }
 
-void BlockCipher::Encrypt(uint64_t* _message, int _blocks, uint64_t _key, CipherMode _mode, EncryptionAlgorithm _encrypt)
+void BlockCipher::Encrypt(uint64_t* _message, int _blocks, CipherMode _mode, EncryptionAlgorithm _algo)
 {
 	switch (_mode)
 	{
 	case ECM:
-		ecmEncrypt(_message, _blocks, _key, _encrypt);
+		ecmEncrypt(_message, _blocks, _algo);
 	case CBC:
 		break;
 	case CFB:
@@ -28,14 +28,14 @@ void BlockCipher::Encrypt(uint64_t* _message, int _blocks, uint64_t _key, Cipher
 	}
 }
 
-void BlockCipher::Decrypt(uint64_t* _cyphertext, int _blocks, uint64_t _key, CipherMode _mode, EncryptionAlgorithm _encrypt)
+void BlockCipher::Decrypt(uint64_t* _cyphertext, int _blocks, CipherMode _mode, EncryptionAlgorithm _algo)
 {
 }
 
 // Private
 
-void BlockCipher::ecmEncrypt(uint64_t* _message, int _blocks, uint64_t _key, EncryptionAlgorithm _encrypt)
+void BlockCipher::ecmEncrypt(uint64_t* _message, int _blocks, EncryptionAlgorithm _algo)
 {
 	for (int i = 0; i < _blocks; i++)
-		_message[i] = _encrypt(_message[i], _key);
+		_message[i] = _algo.Encrypt(_message[i]);
 }

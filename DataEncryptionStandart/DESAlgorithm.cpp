@@ -52,20 +52,24 @@ uint64_t DESAlgorithm::Decrypt(uint64_t _cyphertext)
 
 	unsigned int left = _cyphertext >> 32;
 	unsigned int right = _cyphertext & 0xffffffff;
+	uint64_t expanded_right = 0;
 
 	for (int i = 0; i < 16; i++)
 	{
-		uint64_t expanded_right = Permutations::Permutate(right, 32, 48, E);
+		expanded_right = Permutations::Permutate(right, 32, 48, E);
 
 		expanded_right ^= this->encryption_round_key_[15 - i];
 
 		expanded_right = Permutations::SBoxSubstitution(expanded_right);
 
+		expanded_right = Permutations::Permutate(expanded_right, 32, 32, P);
+
 		expanded_right ^= left;
 
 		left = right;
 
-		right = Permutations::Permutate(expanded_right, 32, 32, P);
+		right = expanded_right;
+
 	}
 
 	_cyphertext = ((uint64_t)right << 32) | ((uint64_t)left);

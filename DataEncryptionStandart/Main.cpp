@@ -7,15 +7,13 @@
 
 int main()
 {
-	DESAlgorithm desa = DESAlgorithm(0x133457799bbcdff1);
+	uint64_t message[] = { 0x123456789abcdef };
 
-	uint64_t cypher = desa.Encrypt(0x0123456789ABCDEF);
+	DESAlgorithm des = DESAlgorithm(0x133457799BBCDFF1);
 
-	std::cout << std::hex << cypher << std::endl;
+	BlockCipher::Encrypt(message, 1, CipherMode::ECM, des);
 
-	uint64_t message = desa.Decrypt(cypher);
-
-	std::cout << std::hex << message << std::endl;
+	std::cout << std::hex << message[0] << std::endl;
 
 	std::getchar();
 }

@@ -1,14 +1,15 @@
 #pragma once
 #include "BlockCipher.h"
 #include "Permutations.h"
+#include "EncryptionAlgorithm.h"
 
-class DESAlgorithm
+class DESAlgorithm : public EncryptionAlgorithm
 {
 public:
 	DESAlgorithm(uint64_t);
 	~DESAlgorithm();
 
-	uint64_t Encrypt(uint64_t);
+	uint64_t Encrypt(uint64_t) override;
 	uint64_t Decrypt(uint64_t);
 
 	static uint64_t* KeyGenerator(uint64_t);
